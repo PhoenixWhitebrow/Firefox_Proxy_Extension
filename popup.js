@@ -13,11 +13,11 @@ enableBtn.addEventListener("click",() =>{
 		enable();
 });
 
-//// Listner for 'Show current settings' button click
-const showBtn = document.getElementById("showBtn");
-showBtn.addEventListener("click",() =>{    
-		show();
-});
+// Listner for 'Show current settings' button click
+//const showBtn = document.getElementById("showBtn");
+//showBtn.addEventListener("click",() =>{    
+//		show();
+//});
 
 // 'Enabled' chekbox
 const enabled = document.getElementById("enabled");
@@ -44,20 +44,24 @@ function apply() {
 	if (enabled.checked == true) {
 		let proxyHost = document.getElementById("proxyHost").value;
 		let proxyPort = document.getElementById("proxyPort").value;
+		let passthrough = document.getElementById("passthrough").value;
 		let config = {
 			proxyType: "manual",
 			http: proxyHost + ":" + proxyPort,
 			ssl: proxyHost + ":" + proxyPort,
 			httpProxyAll:true,
-			proxyDNS: false
+			proxyDNS: false,
+			passthrough: passthrough
 		};
 		browser.proxy.settings.set({value: config});
 		localStorage.setItem("proxyHost", proxyHost);
 		localStorage.setItem("proxyPort", proxyPort);
+		localStorage.setItem("passthrough", passthrough);
 	} else {
 		let config = {
 			proxyType: "system",
-			proxyDNS: false
+			proxyDNS: false,
+			passthrough: ""
 		};
 		browser.proxy.settings.set({value: config});
 	}
@@ -87,8 +91,10 @@ function get() {
 		&& localStorage.getItem("proxyPort") != null) {
 		let proxyHost = document.getElementById("proxyHost");
 		let proxyPort = document.getElementById("proxyPort");
+		let passthrough = document.getElementById("passthrough");
 		proxyHost.value = localStorage.getItem("proxyHost");
 		proxyPort.value = localStorage.getItem("proxyPort");
+		passthrough.value = localStorage.getItem("passthrough");
 	}
 }
 
