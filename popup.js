@@ -3,92 +3,32 @@ window.onload = get();
 
 // Listner for 'Disable' button click
 const disableBtn = document.getElementById("disableBtn");
-disableBtn.addEventListener("click",() =>{    
+disableBtn.addEventListener("click",() => {    
 		disable();
 });
 
 // Listner for 'Enable' button click
 const	enableBtn = document.getElementById("enableBtn");
-enableBtn.addEventListener("click",() =>{    
+enableBtn.addEventListener("click",() => {    
 		enable();
 });
 
-// Listner for 'Show current settings' button click
-//const showBtn = document.getElementById("showBtn");
-//showBtn.addEventListener("click",() =>{    
-//		show();
-//});
-
-// 'Enabled' chekbox
-const enabled = document.getElementById("enabled");
-
 // Icon in the popup
 const iconPopup = document.getElementById("icon");
-
-// Enable proxy
-function enable() {
-	enabled.checked = true;
-	apply();
-	icoOn();
-}
-
-// Disable proxy
-function disable() {
-	enabled.checked = false;
-	apply();
-	icoOff();
-}
-
-// Apply proxy settings
-function apply() {
-	if (enabled.checked == true) {
-		let proxyHost = document.getElementById("proxyHost").value;
-		let proxyPort = document.getElementById("proxyPort").value;
-		let passthrough = document.getElementById("passthrough").value;
-		let config = {
-			proxyType: "manual",
-			http: proxyHost + ":" + proxyPort,
-			ssl: proxyHost + ":" + proxyPort,
-			httpProxyAll:true,
-			proxyDNS: false,
-			passthrough: passthrough
-		};
-		browser.proxy.settings.set({value: config});
-		localStorage.setItem("proxyHost", proxyHost);
-		localStorage.setItem("proxyPort", proxyPort);
-		localStorage.setItem("passthrough", passthrough);
-	} else {
-		let config = {
-			proxyType: "system",
-			proxyDNS: false,
-			passthrough: ""
-		};
-		browser.proxy.settings.set({value: config});
-	}
-}
-
-// Show current settings JSON
-function show() {
-	let getting = browser.proxy.settings.get({});
-	getting.then((got) => {
-		alert(JSON.stringify(got.value));
-	});
-}
 
 // Initial settings check and popup configuration
 function get() {
 	let getting = browser.proxy.settings.get({});
 	getting.then((got) => {
 		if (got.value.proxyType == "system") {
-			enabled.checked = false;
 			icoOff();
 		} else if (got.value.proxyType == "manual") {
-			enabled.checked = true;
 			icoOn();
 		}
 	});
 	if (localStorage.getItem("proxyHost") != null
-		&& localStorage.getItem("proxyPort") != null) {
+		&& localStorage.getItem("proxyPort") != null
+		&& localStorage.getItem("passthrough") != null) {
 		let proxyHost = document.getElementById("proxyHost");
 		let proxyPort = document.getElementById("proxyPort");
 		let passthrough = document.getElementById("passthrough");
@@ -96,6 +36,45 @@ function get() {
 		proxyPort.value = localStorage.getItem("proxyPort");
 		passthrough.value = localStorage.getItem("passthrough");
 	}
+}
+
+// Enable proxy
+function enable() {
+	let proxyHost = document.getElementById("proxyHost").value;
+	let proxyPort = document.getElementById("proxyPort").value;
+	let passthrough = document.getElementById("passthrough").value;
+	let config = {
+		proxyType: "manual",
+		http: proxyHost + ":" + proxyPort,
+		ssl: proxyHost + ":" + proxyPort,
+		httpProxyAll:true,
+		proxyDNS: false,
+		passthrough: passthrough
+	};
+	browser.proxy.settings.set({value: config});
+	icoOn();
+	save();
+}
+
+// Disable proxy
+function disable() {
+	let config = {
+		proxyType: "system",
+		proxyDNS: false,
+		passthrough: ""
+	};
+	browser.proxy.settings.set({value: config});
+	icoOff();
+	save();
+}
+
+function save() {
+	let proxyHost = document.getElementById("proxyHost").value;
+	let proxyPort = document.getElementById("proxyPort").value;
+	let passthrough = document.getElementById("passthrough").value;
+	localStorage.setItem("proxyHost", proxyHost);
+	localStorage.setItem("proxyPort", proxyPort);
+	localStorage.setItem("passthrough", passthrough);
 }
 
 // Set icons to enabled state
@@ -124,4 +103,12 @@ iconsOff = {
 	"32":"images/icon-32.png",
 	"48":"images/icon-48.png",
 	"128":"images/icon-128.png"
+}
+
+// Show current settings JSON
+function show() {
+	let getting = browser.proxy.settings.get({});
+	getting.then((got) => {
+		alert(JSON.stringify(got.value));
+	});
 }
