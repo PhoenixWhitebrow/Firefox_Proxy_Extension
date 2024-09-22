@@ -1,20 +1,52 @@
 // Callback on opening extension popup
-window.onload = get();
+window.onload = browser.extension.isAllowedIncognitoAccess().then(checkIncognito);
 
 // Listner for 'Disable' button click
 const disableBtn = document.getElementById("disableBtn");
 disableBtn.addEventListener("click",() => {    
-		disable();
+	disable();
 });
 
 // Listner for 'Enable' button click
 const	enableBtn = document.getElementById("enableBtn");
 enableBtn.addEventListener("click",() => {    
-		enable();
+	enable();
 });
 
 // Icon in the popup
 const iconPopup = document.getElementById("icon");
+
+// Check if the extension has access to the Private browsing mode
+// Without this access, the extension will not be able to change the browser's proxy settings
+function checkIncognito(isAllowed) {
+	if (isAllowed == false) {
+		warning();
+	} else if (isAllowed == true) {
+		get();
+	}
+}
+
+// Warn that the extension does not have the required permissions
+function warning() {
+	let warn = 
+	`<h2 style="margin-left: 5px;">
+		<br>Attention!<br>
+	</h2>
+	<h3 style="text-align: center; margin-left: 10px; margin-right: 10px;">
+		For this extension
+		<br>to work properly,
+		<br>please allow it
+		<br>to access private
+		<br>browsing mode.
+	</h3>`;
+	iconPopup.insertAdjacentHTML("afterend", warn);
+	let header = document.getElementById("header");
+	let form = document.getElementById("form");
+	let buttons = document.getElementById("buttons");
+	header.style.display = 'none';
+	form.style.display = 'none';
+	buttons.style.display = 'none';
+}
 
 // Initial settings check and popup configuration
 function get() {
