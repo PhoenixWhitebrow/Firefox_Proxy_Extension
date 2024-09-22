@@ -9,7 +9,7 @@
   "browser_specific_settings": {
     "gecko": {
       "id": "phoenix-proxy-ff@phoenixvs.site",
-      "strict_min_version": "91.1.0"
+      "strict_min_version": "109.0"
     }
   },
 

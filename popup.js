@@ -28,21 +28,11 @@ function checkIncognito(isAllowed) {
 
 // Warn that the extension does not have the required permissions
 function warning() {
-	let warn = 
-	`<h2 style="margin-left: 5px;">
-		<br>Attention!<br>
-	</h2>
-	<h3 style="text-align: center; margin-left: 10px; margin-right: 10px;">
-		For this extension
-		<br>to work properly,
-		<br>please allow it
-		<br>to access private
-		<br>browsing mode.
-	</h3>`;
-	iconPopup.insertAdjacentHTML("afterend", warn);
+	let warn = document.getElementById("warn");
 	let header = document.getElementById("header");
 	let form = document.getElementById("form");
 	let buttons = document.getElementById("buttons");
+	warn.style.display = 'block';
 	header.style.display = 'none';
 	form.style.display = 'none';
 	buttons.style.display = 'none';
