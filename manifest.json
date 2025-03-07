@@ -3,7 +3,7 @@
 
   "name": "Phoenix Proxy FF",
   "description": "An extension for using proxy service in Mozilla Firefox",
-  "version": "1.1.1",
+  "version": "1.2",
   "author": "Phoenix Whitebrow",
 
   "browser_specific_settings": {
@@ -26,5 +26,9 @@
 
   "action": {
     "default_popup":"popup.html"
+  },
+
+   "background": {
+    "scripts": ["service_worker.js"]
   }
 }
